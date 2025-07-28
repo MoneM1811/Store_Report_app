@@ -10,20 +10,24 @@ st.markdown("## 📦 Sharqawi Inventory Search Report")
 st.markdown("Use the filters below to explore the inventory status by material or vendor.")
 
 # --- Load Data ---
+# --- Load Data ---
 @st.cache_data
 def load_data():
-    path = r"L:\Monthly Reports\Search_Report.xlsx"  # Updated path
-    df = pd.read_excel(path)
+    file_path = "Search_Report.xlsx"  # Make sure this file is in the same directory or in your GitHub repo
 
+    df = pd.read_excel(file_path)  # Corrected 'path' to 'file_path'
+
+    # Format date columns
     df['Last_issue'] = pd.to_datetime(df['Last_issue'], errors='coerce').dt.strftime('%Y-%m-%d')
     df['Last_Received'] = pd.to_datetime(df['Last_Received'], errors='coerce').dt.strftime('%Y-%m-%d')
 
-    # Format numbers
-    df['Vendor_Balance'] = df['Vendor_Balance'].map('{:,.1f}'.format)
-    df['Store_Qunt'] = df['Store_Qunt'].map('{:,.2f}'.format)
-    df['last_RCV_Cost'] = df['last_RCV_Cost'].map('{:,.3f}'.format)
-    
+    # Format number columns
+    df['Vendor_Balance'] = df['Vendor_Balance'].apply(lambda x: f"{x:,.1f}")
+    df['Store_Qunt'] = df['Store_Qunt'].apply(lambda x: f"{x:,.2f}")
+    df['last_RCV_Cost'] = df['last_RCV_Cost'].apply(lambda x: f"{x:,.3f}")
+
     return df
+
 
 search_df = load_data()
 
